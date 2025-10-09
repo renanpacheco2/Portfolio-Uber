@@ -1,1 +1,44 @@
-## 
+##  🚗 Análise de Corridas da Uber ## 
+
+Este projeto tem como objetivo analisar dados de corridas realizadas pela Uber, buscando identificar **fatores que influenciam o ganho por hora**, **eficiência operacional** e **custo-benefício na categoria X**.
+
+----------------------------------
+
+## 📋 Contexto do Projeto 
+
+Eu sou motorista de aplicativo e decidi construir uma planilha para analisar minhas próprias escolhas de corridas com o objetivo de entender:
+
+1) Quais variaveis impactam no lucro por hora ?
+2) Como otimizar tempo e distância entre corridas ?
+3) Existe uma tendência de quantidade de corridas e valor por hora ?
+
+## 🎯 Objetivos da Análise
+
+1. Calcular o **valor por km** e o **ganho por hora** das corridas.
+2. Identificar padrões nas corridas. 
+3. Identificar o impacto dos incentivos Turbo+ e Dinâmicos nos preços das corridas.
+4. Entender se existe um tendência de decrescimento no **valor por km** de acordo com a distância da corrida.
+
+## 🧠 Etapas do Projeto
+
+| Etapa | Descrição |
+|-------|------------|
+| 1️⃣ Coleta de dados | (Planilha com dados de cada corrida)[https://github.com/renanpacheco2/Portfolio-Uber/tree/main/data]
+| 2️⃣ Limpeza | Tratamento de algumas colunas, normalização e padronização dos dados |
+| 3️⃣ Criação de métricas | Cálculo de valor por km, ganho por hora |
+| 4️⃣ Análise exploratória | Gráficos e estatísticas descritivas |
+| 5️⃣ Modelagem | Análise de tendências e identificação de variavéis mais relevantes |
+| 6️⃣ Conclusão | Principais insights e decisões práticas tomadas |
+
+## 🧰 Ferramentas Utilizadas
+
+- **Python** 🐍  
+- **Pandas / NumPy** para manipulação de dados  
+- **Matplotlib** para visualizações  
+- **Statsmodels** para análise de tendências
+
+## 📈 Principais Insights
+
+> Existem picos claros de demanda entre os horários de 5 a.m e 9 a.m, assim como entre os horários 4 p.m e 7 p.m; Nesses horários o valor por hora frequentemente está acima de R$ 40. Trazendo um aumento de pelo menos 33% no ganho por hora em comparação ao valor fora desses horários.
+
+> As corridas ditas longas ( > 15 km ) tendem a ter um valor por km baixo, porém com um valor por hora mais alto, de forma frequente. 
