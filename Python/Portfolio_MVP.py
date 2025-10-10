@@ -3,9 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
 
-df_corridas= pd.read_excel("C:\\Users\\rpstr\\OneDrive\\Documentos\\Renan_Estacio\\Portfolio\\Python\\Portfolio\\data\\Uber_Renan_Portfolio.xlsx", sheet_name="Corridas")
-df_localidade = pd.read_excel("C:\\Users\\rpstr\\OneDrive\\Documentos\\Renan_Estacio\\Portfolio\\Python\\Portfolio\\data\\Uber_Renan_Portfolio.xlsx", sheet_name="Localidade")
-df_valor = pd.read_excel("C:\\Users\\rpstr\\OneDrive\\Documentos\\Renan_Estacio\\Portfolio\\Python\\Portfolio\\data\\Uber_Renan_Portfolio.xlsx", sheet_name="Valor_Viagem")
+df_corridas= pd.read_excel("data/Uber_Renan_Portfolio.xlsx", sheet_name="Corridas")
+df_localidade = pd.read_excel("data/Uber_Renan_Portfolio.xlsx", sheet_name="Localidade")
+df_valor = pd.read_excel("data/Uber_Renan_Portfolio.xlsx", sheet_name="Valor_Viagem")
 
 #Merge das tabelas
 df_merged = pd.merge(df_corridas,df_localidade, on="ID_viagem", how="left")
@@ -214,4 +214,4 @@ plt.grid(True)
 plt.show()
 
 #salvando uma cópia do dataframe tratado
-df_merged.to_excel("C:\\Users\\rpstr\\OneDrive\\Documentos\\Renan_Estacio\\Portfolio\\Python\\Portfolio\\data\\Uber_Renan_Portfolio_Tratado.xlsx", index=False) 
+df_merged.to_excel("data/Uber_Renan_Portfolio_Tratado.xlsx", index=False) 
