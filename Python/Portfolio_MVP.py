@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from statsmodels.tsa.seasonal import seasonal_decompose
 
+#Carregando as tabelas
 df_corridas= pd.read_excel("data/Uber_Renan_Portfolio.xlsx", sheet_name="Corridas")
 df_localidade = pd.read_excel("data/Uber_Renan_Portfolio.xlsx", sheet_name="Localidade")
 df_valor = pd.read_excel("data/Uber_Renan_Portfolio.xlsx", sheet_name="Valor_Viagem")
