@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from statsmodels.tsa.seasonal import seasonal_decompose
 
 #Carregando as tabelas
@@ -140,6 +141,18 @@ df_merged.set_index("data", inplace=True)
 decomposicao = seasonal_decompose(corridas_por_dia, model='additive', period=7)
 decomposicao.plot()
 plt.suptitle('Decomposição da Série Temporal - Número de Corridas por Dia', fontsize=16)
+plt.show()
+
+#22 - Quantas corridas fazer por dia da semana ?
+ordem_dias = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado']  # Ordem correta dos dias da semana
+corridas_por_dia_semana = df_merged.groupby(df_merged['dia_da_semana'])['id_viagem'].count()
+plt.figure(figsize=(10,8))
+sns.barplot(x=corridas_por_dia_semana.index, y=corridas_por_dia_semana.values, palette='viridis',order=ordem_dias)
+plt.title('Número de Corridas por Dia da Semana')
+plt.xlabel('Dia da Semana')
+plt.ylabel('Número de Corridas')
+plt.xticks(rotation=45)
+plt.grid(axis='y')
 plt.show()
 
 #22 - Vamos criar 03 gráficos : dispersão ( tempo x valor e valor/km x distancia) ; barras ( comparando bairros mais lucrativos ) ; boxplots ( variação de preços por km rodados )
