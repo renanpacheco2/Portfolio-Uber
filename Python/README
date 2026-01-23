@@ -1,0 +1,83 @@
+MOTORISTA DE APLICATIVO EM SÃO GONÇALO/RJ - MVP
+
+1. INTRODUÇÃO
+> O conjunto de dados analisados, foi uma construção de acordo com os conhecimentos sobre Banco de Dados relacionais adquiridos na gradução tecnológica de Ciência de Dados. O período analisado é de Agosto a Dezembro de 2024. A base de dados foi pensada de acordo com os conceitos de normalização do banco de dados, e podem ser acessados por aqui : [(https://github.com/renanpacheco2/Portfolio-Uber/blob/main/data/Uber_Renan_Portfolio.xlsx)]
+
+    🎯 Objetivo do Projeto
+
+    O objetivo deste projeto foi analisar as corridas realizadas no aplicativo Uber para:
+
+    1. Avaliar os valores praticados nas corridas e identificar padrões de precificação.
+
+    2. Entender a tendência de ganhos por hora, avaliando a eficiência e rentabilidade ao longo do tempo.
+
+    3. Analisar a relação entre valor recebido e quilometragem percorrida (R$/km).
+
+    4. Identificar as localidades mais lucrativas com base no volume e valor médio das corridas.
+
+    5. Mapear horários de pico e períodos de maior movimentação.
+
+2. 🧱 Modelo Relacional do Dataset
+
+O dataset foi modelado em formato relacional, seguindo princípios de normalização e modularidade.
+A tabela Corridas funciona como tabela-fato, enquanto as demais atuam como tabelas-dimensão, permitindo análises sob diferentes perspectivas.
+
+
+
+                   ┌─────────────────────┐
+                   │     Motoristas      │
+                   │  id_motorista (PK)  │
+                   │  nome, idade, etc.  │
+                   └──────────┬──────────┘
+                              │
+                              │ (FK)
+                              │
+┌───────────────┐     ┌───────▼─────────┐      ┌─────────────────────────┐
+│   Aplicativos │     │     Corridas    │      │          Carros         |
+│ id_app (PK)   │◄────┤ id_viagem  (PK) │──────► id_carro (PK)           │
+│ nome_app      │     │ id_motorista(FK)│      │ modelo, ano,marca,      |
+|               |     | id_local(FK)    |      | rendimento,abastecimento│
+└───────────────┘     │ id_pagamento(FK)│      └─────────────────────────┘
+                      │ id_carro(FK),   │
+                      │ id_app(FK),     |
+                      | id_valor(FK),   |
+                      | data, duração   |
+                      │ dia_da_semana,  |
+                      | horário         |
+                      └───────┬─────────┘
+                              │
+                              │
+               ┌──────────────▼──────────────┐
+               │        Localidade           │
+               │    id_local (PK)            │
+               │    bairro, cidade, estado   │
+               └─────────────────────────────┘
+
+               ┌──────────────▼──────────────┐
+               │       Valor_Viagem          │
+               │    id_viagem(PK), data      │
+               │    pg_motorista, turbo+,    │
+               │    dinâmico, valor_total    │
+               └─────────────────────────────┘
+
+               ┌──────────────▼──────────────┐
+               │     Tipo de Pagamento       │
+               │    id_pagamento (PK)        │
+               │    método                   │
+               └─────────────────────────────┘
+
+💡 Benefícios do modelo
+
+. Permite análises multidimensionais, cruzando variáveis como motorista, localidade, valor e forma de pagamento.
+
+. Facilita o uso de Python ou SQL para consultas complexas.
+
+. É escalável, podendo receber novos aplicativos, motoristas e métodos de pagamento sem perder estrutura.
+
+
+3. PROCEDIMENTOS/METODOLODIA
+
+> Na construção do dataset , intencionalmente o fiz com diferenças nas letas, acentos, espaçamentos diferenciados, etc; Esse "erro" foi para que eu pudesse lidar com a realidade dos dados brutos de forma geral e pudesse aprender sobre padronização de colunas, adição e subtração das mesmas. Com isso, foi preciso fazer alterações nelas, para que todas estejam com letra minúsculas, sem acentos, caracteres especiais, etc. As ferramentas utilizados nesse processo foram : Python ( Pandas ) e Excel.
+> Busquei fazer uma análise dos valores sem adição de incentivos nas corridas, ou seja, sem turbo+ ou dinâmicos. Além do mais, foi incluso uma coluna na tabela-dimensão localidade chamada " deslocamento(km)" afim de entender qual o impacto no valor/km e no consumo de combustível para que esteja mais próximo da realidade do motorista, foi estabelecido um valor fixo de 1,5km; Esse valor, é uma média aritmética de uma pesquisa feita numa amostra de um grupo de 27 membros onde todos trabalham com aplicativos de transporte. A pesquisa foi feita apresentando 4 opções com faixas de deslocamento, onde a opção mais votada foi a opção de 1km até 1,5km. 
+> Os dados foram coletados a partir do site da Uber(https://drivers.uber.com/earnings/activities) para o meu perfil de motorista , onde há os detalhes de cada corrida, assim como uma imagem do trajeto delas. São corridas oficiais, registradas pelo aplicativo, e existe viés devido a necessidade de escolha dado o contexto de cada Estado onde a Uber atua. 
+> Toda a análise pode ser acompanhada aqui: [(https://github.com/renanpacheco2/Portfolio-Uber/blob/main/Python/Portfolio_MVP.py)]

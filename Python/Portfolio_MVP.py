@@ -10,8 +10,8 @@ df_localidade = pd.read_excel("data/Uber_Renan_Portfolio.xlsx", sheet_name="Loca
 df_valor = pd.read_excel("data/Uber_Renan_Portfolio.xlsx", sheet_name="Valor_Viagem")
 
 #Merge das tabelas
-df_merged = pd.merge(df_corridas,df_localidade, on="ID_viagem", how="left")
-df_merged = pd.merge(df_merged, df_valor, on="ID_viagem", how="left")
+df_merged = pd.merge(df_corridas,df_localidade, on=["ID_viagem", "ID_local"], how="left")
+df_merged = pd.merge(df_merged, df_valor, on="ID_valor", how="left")
 
 #Removendo a coluna Data_x e renomeando a Data_y , que são iguais
 df_merged = df_merged.drop(columns=["Data_x"])
