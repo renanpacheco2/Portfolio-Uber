@@ -37,6 +37,7 @@ df_merged[['municipio_embarque', 'bairro_embarque', 'municipio_desembarque', 'ba
 ## Análise Exploratória dos Dados (EDA)
 # Análise 1 : Ganho por dia da semana, vamos analisar o ganho total por dia da semana, isso inclui os valores preco_dinamico e turbo, sendo assim vamos adicionar uma nova coluna chamada 'valor_total' que será a soma dos valores 'preco_dinamico' e 'turbo' e 'pg_motorista'
 df_merged['valor_total'] = df_merged['preco_dinamico'] + df_merged['turbo'] + df_merged['pg_motorista']
+
 ganho_dia_semana = df_merged.groupby(df_merged['data'].dt.day_name())['valor_total'].sum().reindex(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
 plt.figure(figsize=(10,6))
 sns.barplot(x=ganho_dia_semana.index, y=ganho_dia_semana.values, palette='viridis')
@@ -173,4 +174,46 @@ plt.ylabel('Ganho por Hora (R$)')
 plt.title('Ganho por Hora Real por Faixa Horária')
 plt.show()
 
-## Análise 5:
+## Análise 5: Nossa análise final será temporal. Onde vamos buscar responder as perguntas : 
+# Como está o ganho total ao longo do tempo ? Estável, Aumentando ou DIminuindo ?
+# Existem outliers ? Se sim, o que explica eles ?
+# Meu ganho médio por corrida está aumentando ou diminuindo ao longo do tempo ?
+
+# 5.1 Ganho total ao longo do tempo
+df_merged['data'] = pd.to_datetime(df_merged['data'])
+df_merged['ano_mes'] = df_merged['data'].dt.to_period('M').astype(str)
+
+temporal = df_merged.groupby('ano_mes').agg(
+    ganho_total = ('valor_total', 'sum'),
+    horas_trabalhadas = ('duracao_total_hora', 'sum'),
+    km_total = ('km_total', 'sum'),
+    qtd_corridas = ('valor_total', 'count')
+).reset_index()
+
+temporal['ganho_hora'] = temporal['ganho_total'] / temporal['horas_trabalhadas'].replace(0, np.nan)
+temporal['ganho_km'] = temporal['ganho_total'] / temporal['km_total'].replace(0, np.nan)
+temporal['ganho_medio_corrida'] = temporal['ganho_total'] / temporal['qtd_corridas'].replace(0, np.nan)
+
+plt.figure()
+plt.plot(temporal['ano_mes'], temporal['ganho_total'], marker='o')
+plt.title('Evolução do Ganho Mensal')
+plt.xlabel('Mês')
+plt.ylabel('Ganho Total (R$)')
+plt.xticks(rotation=45)
+plt.grid(True)
+plt.show()
+
+# 5.2 Análise de outliers no ganho mensal
+# Devido aos poucos meses de dados, a visualização do outlier será feita de forma simples, observando os picos no gráfico acima. O outlier mais evidente é no mês de agosto, onde havia dedicação integral a plataforma Uber, e os meses seguintes tendo queda brusca devido inserção no mercado formal, sendo dezembro um mês com um ligeiro aumento devido festividades de final de ano.
+
+# 5.3 Análise do ganho médio por corrida ao longo do tempo
+plt.figure()
+plt.plot(temporal['ano_mes'], temporal['ganho_medio_corrida'], marker='o', color='orange')
+plt.title('Evolução do Ganho Médio por Corrida')
+plt.xlabel('Mês')
+plt.ylabel('Ganho Médio por Corrida (R$)')
+plt.xticks(rotation=45)
+plt.grid(True)
+plt.show()
+
+## Conclusão: A análise temporal mostra que o ganho total teve um pico inicial seguido por uma queda, refletindo a transição para o mercado formal. O ganho médio por corrida também apresenta variações, indicando adaptações nas estratégias de precificação e demanda ao longo do tempo. Com particular atenção ao mês de dezembro , que apresentou um aumento devido ás festividades de final de ano.
