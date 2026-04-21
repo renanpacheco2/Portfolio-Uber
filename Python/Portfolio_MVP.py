@@ -174,12 +174,32 @@ plt.ylabel('Ganho por Hora (R$)')
 plt.title('Ganho por Hora Real por Faixa Horária')
 plt.show()
 
-## Análise 5: Nossa análise final será temporal. Onde vamos buscar responder as perguntas : 
+## Análise 5: Ganho por hora por dia da semana - Vamos analisar o valor ganho por hora de segunda a sexta, no horário da tarde a partir das 17h até as 23h59, que é o horário considerado como o útil para renda extra. 
+## Vamos plotar o gráfico de barras com o eixo X sendo os dias da semana e o eixo y sendo o ganho médio por hora, para isso, vamos criar um novo dataframe agrupando por dia da semana e faixa horária, filtrando apenas os dias de segunda a sexta e as faixas horárias de tarde e noite.
+analise_hora_dia = df_merged[
+    (df_merged['data'].dt.day_name().isin(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])) &
+    (df_merged['hora'] >= 17) & (df_merged['hora'] < 24)
+].groupby(['data', 'faixa_horaria']).agg({
+    'ganho_hora': 'mean'
+})
+analise_hora_dia = analise_hora_dia.reset_index()
+## Vamos plotar o gráfico de barras com o eixo X sendo os dias da semana e o eixo y sendo o ganho médio por hora, para isso, vamos criar um novo dataframe agrupando por dia da semana e faixa horária, filtrando apenas os dias de segunda a sexta e as faixas horárias de tarde e noite.
+analise_hora_dia['dia_semana'] = analise_hora_dia['data'].dt.day_name()
+analise_hora_dia = analise_hora_dia[analise_hora_dia['faixa_horaria'].isin(['Tarde', 'Noite'])]
+ganho_hora_dia = analise_hora_dia.groupby('dia_semana')['ganho_hora'].mean().reindex(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
+plt.figure(figsize=(10,6))
+sns.barplot(x=ganho_hora_dia.index, y=ganho_hora_dia.values, palette='coolwarm')
+plt.title('Ganho Médio por Hora - Dias Úteis')
+plt.xlabel('Dia da Semana')
+plt.ylabel('Ganho Médio por Hora (R$)')
+plt.show()
+
+## Análise 6: Nossa análise final será temporal. Onde vamos buscar responder as perguntas : 
 # Como está o ganho total ao longo do tempo ? Estável, Aumentando ou DIminuindo ?
 # Existem outliers ? Se sim, o que explica eles ?
 # Meu ganho médio por corrida está aumentando ou diminuindo ao longo do tempo ?
 
-# 5.1 Ganho total ao longo do tempo
+# 6.1 Ganho total ao longo do tempo
 df_merged['data'] = pd.to_datetime(df_merged['data'])
 df_merged['ano_mes'] = df_merged['data'].dt.to_period('M').astype(str)
 
@@ -203,15 +223,26 @@ plt.xticks(rotation=45)
 plt.grid(True)
 plt.show()
 
-# 5.2 Análise de outliers no ganho mensal
+# 6.2 Análise de outliers no ganho mensal
 # Devido aos poucos meses de dados, a visualização do outlier será feita de forma simples, observando os picos no gráfico acima. O outlier mais evidente é no mês de agosto, onde havia dedicação integral a plataforma Uber, e os meses seguintes tendo queda brusca devido inserção no mercado formal, sendo dezembro um mês com um ligeiro aumento devido festividades de final de ano.
 
-# 5.3 Análise do ganho médio por corrida ao longo do tempo
+# 6.3 Análise do ganho médio por corrida ao longo do tempo
 plt.figure()
 plt.plot(temporal['ano_mes'], temporal['ganho_medio_corrida'], marker='o', color='orange')
 plt.title('Evolução do Ganho Médio por Corrida')
 plt.xlabel('Mês')
 plt.ylabel('Ganho Médio por Corrida (R$)')
+plt.xticks(rotation=45)
+plt.grid(True)
+plt.show()
+
+# 6.3 - Análise do faturamento médio diário ao longo do tempo ( Ago - Dez/ 2024 )
+temporal['ganho_diario'] = temporal['ganho_total'] / temporal['qtd_corridas'].replace(0, np.nan)
+plt.figure()
+plt.plot(temporal['ano_mes'], temporal['ganho_diario'], marker='o', color='green')
+plt.title('Evolução do Ganho Diário Médio')
+plt.xlabel('Mês')
+plt.ylabel('Ganho Diário Médio (R$)')
 plt.xticks(rotation=45)
 plt.grid(True)
 plt.show()
